@@ -1,0 +1,51 @@
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
+import { VideoService } from './video.service';
+import { Video } from './video.entity';
+import { AuthGuard } from '@nestjs/passport';
+import { ApiTags, ApiOperation, ApiQuery, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
+import { CreateVideoDto, UpdateVideoDto } from './dto/video.dto';
+
+@ApiTags('Videos')
+@ApiBearerAuth()
+@Controller('videos')
+@UseGuards(AuthGuard('jwt'))
+export class VideoController {
+  constructor(private readonly videoService: VideoService) {}
+
+  @Get()
+  @ApiOperation({ summary: 'Get all videos with pagination' })
+  @ApiQuery({ name: 'page', required: false, type: Number, description: 'Page number' })
+  @ApiQuery({ name: 'limit', required: false, type: Number, description: 'Items per page' })
+  findAll(
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ) {
+    return this.videoService.findAll(+page, +limit);
+  }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Get a video by ID' })
+  findOne(@Param('id') id: string) {
+    return this.videoService.findOne(+id);
+  }
+
+  @Post()
+  @ApiOperation({ summary: 'Create a new video' })
+  @ApiBody({ type: CreateVideoDto })
+  create(@Body() data: CreateVideoDto) {
+    return this.videoService.create(data);
+  }
+
+  @Patch(':id')
+  @ApiOperation({ summary: 'Update an existing video' })
+  @ApiBody({ type: UpdateVideoDto })
+  update(@Param('id') id: string, @Body() data: UpdateVideoDto) {
+    return this.videoService.update(+id, data);
+  }
+
+  @Delete(':id')
+  @ApiOperation({ summary: 'Soft delete a video by ID' })
+  remove(@Param('id') id: string) {
+    return this.videoService.remove(+id);
+  }
+}
