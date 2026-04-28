@@ -6,6 +6,12 @@ import { TransformInterceptor } from './common/interceptors/transform.intercepto
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors({
+    origin: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
+
   app.useGlobalInterceptors(new TransformInterceptor());
 
   const config = new DocumentBuilder()
