@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Not } from 'typeorm';
 import { Video } from './video.entity';
+import { CreateVideoDto, UpdateVideoDto } from './dto/video.dto';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -57,7 +58,7 @@ export class VideoService {
     };
   }
 
-  async create(data: Partial<Video>, videoFile: Express.Multer.File, thumbnailFile?: Express.Multer.File) {
+  async create(data: CreateVideoDto, videoFile: Express.Multer.File, thumbnailFile?: Express.Multer.File) {
     const video = this.videoRepository.create({
       ...data,
       url: `/uploads/${videoFile.filename}`,
@@ -66,7 +67,7 @@ export class VideoService {
     return this.videoRepository.save(video);
   }
 
-  async update(id: number, data: Partial<Video>, videoFile?: Express.Multer.File, thumbnailFile?: Express.Multer.File) {
+  async update(id: number, data: UpdateVideoDto, videoFile?: Express.Multer.File, thumbnailFile?: Express.Multer.File) {
     const video = await this.findOne(id);
     
     if (videoFile) {
