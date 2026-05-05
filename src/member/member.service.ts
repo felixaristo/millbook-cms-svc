@@ -12,21 +12,19 @@ export class MemberService {
   ) {}
 
   async findAll(page: number = 1, limit: number = 10) {
-    const [data, total] = await this.memberRepository.findAndCount({
+    const [items, total] = await this.memberRepository.findAndCount({
       where: { role: 2 },
+      select: ['id', 'fullname', 'username', 'created_at'],
       skip: (page - 1) * limit,
       take: limit,
       order: { created_at: 'DESC' },
     });
 
     return {
-      data,
-      meta: {
-        total,
-        page,
-        limit,
-        last_page: Math.ceil(total / limit),
-      },
+      items,
+      total,
+      page,
+      limit,
     };
   }
 

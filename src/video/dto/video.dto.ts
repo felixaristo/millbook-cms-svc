@@ -7,11 +7,12 @@ export class CreateVideoDto {
   @IsNotEmpty()
   title: string;
 
-  @ApiProperty({ example: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', description: 'URL of the video' })
-  @IsString()
-  @IsNotEmpty()
-  @IsUrl()
-  url: string;
+  @ApiProperty({ type: 'string', format: 'binary', description: 'Video file' })
+  video: any;
+
+  @ApiProperty({ type: 'string', format: 'binary', description: 'Thumbnail file', required: false })
+  @IsOptional()
+  thumbnail: any;
 }
 
 export class UpdateVideoDto {
@@ -20,9 +21,11 @@ export class UpdateVideoDto {
   @IsString()
   title?: string;
 
-  @ApiProperty({ example: 'https://vimeo.com/123456789', description: 'New URL of the video', required: false })
+  @ApiProperty({ type: 'string', format: 'binary', description: 'Video file', required: false })
   @IsOptional()
-  @IsString()
-  @IsUrl()
-  url?: string;
+  video?: any;
+
+  @ApiProperty({ type: 'string', format: 'binary', description: 'Thumbnail file', required: false })
+  @IsOptional()
+  thumbnail?: any;
 }

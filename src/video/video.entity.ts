@@ -1,4 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
+import { FileUrlTransformer } from '../common/transformers/file-url.transformer';
 
 @Entity('videos')
 export class Video {
@@ -8,8 +9,11 @@ export class Video {
   @Column()
   title: string;
 
-  @Column()
+  @Column({ transformer: new FileUrlTransformer() })
   url: string;
+
+  @Column({ nullable: true, transformer: new FileUrlTransformer() })
+  thumbnail: string;
 
   @CreateDateColumn()
   created_at: Date;
